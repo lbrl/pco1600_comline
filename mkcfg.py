@@ -65,7 +65,33 @@ def main():
 	fout = open(foutname, 'w')
 	fout.write(out)
 	fout.close()
-		
+
+
+def help():
+    print '''Usage:\n\tmkcfg.py [option argumetns]'''
+    print 'Usage:\n\tmkcfg.py fout cfg.txt texp 500 texpbase 0 binxy 2 2\n\n\n'
+    print 'Possible options:\n'
+    print '  texp\t\tGets one _int_ argument,  the exposure time in time'
+    print '  \t\tunits specified with texpbase.\n'
+    print '  texpbase\tGets one _int_ argument,  the time base for the'
+    print '  \t\texposure time.  Can be 0 --- ns,  1 --- us,  2 --- ms.\n'
+    print '  tdelay\t\tGet one _int_ argument,  the delay time in time'
+    print '  \t\tunits specified with delaybase.\n'
+    print '  delaytime\tGets one _int_ argument,  the time base for the'
+    print '  \t\tdelay time.  Can be 0 --- ns,  1 --- us,  2 --- ms.\n'
+    print '  npics\t\tGet one _int_ argument > 0,  the number of pictures'
+    print '  \t\tto take.\n'
+    print '  fout\t\tGet one _str_ argument.  The output file name.\n'
+    print '  binx\t\tGet one _int_ argument.  The horizontal binning.\n'
+    print '  biny\t\tGet one _int_ argument.  The vertical binning.\n'
+    print '  binxy\t\tGet two _int_ arguments.  The horizontal and'
+    print '  \t\tvertical binning.\n'
+
 
 if __name__ == '__main__':
-	main()
+    print 'Make a configuration file for the pco.1600.'
+    print 'For help pass :  mktree help'
+    if 'help' in sys.argv:
+        help()
+    else:
+        main()
