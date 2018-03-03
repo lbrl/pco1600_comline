@@ -77,7 +77,7 @@ def help():
     print '  \t\texposure time.  Can be 0 --- ns,  1 --- us,  2 --- ms.\n'
     print '  tdelay\t\tGet one _int_ argument,  the delay time in time'
     print '  \t\tunits specified with delaybase.\n'
-    print '  delaytime\tGets one _int_ argument,  the time base for the'
+    print '  delaybase\tGets one _int_ argument,  the time base for the'
     print '  \t\tdelay time.  Can be 0 --- ns,  1 --- us,  2 --- ms.\n'
     print '  npics\t\tGet one _int_ argument > 0,  the number of pictures'
     print '  \t\tto take.\n'
@@ -86,6 +86,10 @@ def help():
     print '  biny\t\tGet one _int_ argument.  The vertical binning.\n'
     print '  binxy\t\tGet two _int_ arguments.  The horizontal and'
     print '  \t\tvertical binning.\n'
+    print '  trigmode\tGet one _int_ argument.  The trigger mode:'
+    print '  \t\t0 --- auto sequence,'
+    print '  \t\t1 --- software trigger,'
+    print '  \t\t2 --- external exposure start and software trigger.\n'
 
 
 if __name__ == '__main__':
