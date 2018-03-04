@@ -29,6 +29,9 @@ def main():
 	trigmode = 0
 	npic = 5
 	foutname = 'cfg_by_mkcfg.txt'
+    nadc = 1
+    pixelrate = 10000000
+    cooltemp = -150
 	# Read input parameters
 	narg = len(sys.argv)
 	i = 0
@@ -69,6 +72,15 @@ def main():
 		elif arg in ['name', 'outname', 'outputname', 'fout', 'foutname']:
 			foutname = sys.argv[i+1]
 			i += 1
+        elif arg in ['adc', 'adcoper', 'adcoperation']"
+            nadc = int(sys.argv[i+1])
+            i += 1
+        elif arg in ['pixelrate']:
+            pixelrate = int(sys.argv[i+1])
+            i += 1
+        elif arg in ['coolset', 'coolingtemp', 'cooltemp', 'coolingtemperature']:
+            cooltemp = int(sys.argv[i+1])
+            i += 1
 		else:
 			print 'There is not a such option : ', arg
 		i += 1
@@ -81,6 +93,9 @@ def main():
 	out += 'BinningY {}\n'.format(biny)
 	out += 'TriggerMode {}\n'.format(trigmode)
 	out += 'NumberOfPictures {}\n'.format(npic)
+    out += 'ADCOperation {}\n'.format(nadc)
+    out += 'PixelRate {}\n'.format(pixelrate)
+    out += 'CoolingTemperature {}\n'.format(cooltemp)
 	print out
 	fout = open(foutname, 'w')
 	fout.write(out)
