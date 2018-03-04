@@ -125,6 +125,12 @@ def help():
     print '  \t\t0 --- auto sequence,'
     print '  \t\t1 --- software trigger,'
     print '  \t\t2 --- external exposure start and software trigger.\n'
+    print '  adc\t\tGet one _int_ argument.  The number of read out ADCs to be used.'
+    print '  \t\tChoose between 1 and 2.\n'
+    print '  pixelrate\tGet one _int_ argumetn.  The ADC operation frequency.'
+    print '  \t\tCan be 10000000 or 40000000.\n'
+    print '  \t\tcooltemp\tGet one _int_ argument.  CCD sensor cooling temperature.'
+    print '  \t\tFor example -150 corresponds to -15.0 Celsius degree.\n'
 
 
 if __name__ == '__main__':
