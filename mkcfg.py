@@ -2,6 +2,22 @@ import os
 import sys
 
 
+def check_binning_x(binx):
+    if binx in [1, 2]:
+        return binx
+    else:
+        print 'Wrong X binning: {}!  Possible values are 1 and 2.  Set the binning to 1.'.format(binx)
+        return 1
+
+
+def check_binning_y(biny):
+    if biny in [1, 2, 4, 8]:
+        return biny
+    else:
+        print 'Wrong Y binning: {}!  Possible values are 1, 2, 4 and 8.  Set the binning to 1.'.format(biny)
+        return 1
+
+
 def main():
 	# Default values
 	texp = 100
@@ -32,13 +48,17 @@ def main():
 			i += 1
 		elif arg in ['binx', 'binningx']:
 			binx = int(sys.argv[i+1])
+            binx = check_binning_x(binx)
 			i += 1
 		elif arg in ['biny', 'binningy']:
 			biny = int(sys.argv[i+1])
+            biny = check_binning_y(binx)
 			i += 1
 		elif arg in ['binxy', 'binningxy']:
 			binx = int(sys.argv[i+1])
 			biny = int(sys.argv[i+2])
+            binx = check_binning_x(binx)
+            biny = check_binning_y(binx)
 			i += 2
 		elif arg in ['trigmode', 'triggermode']:
 			trigmode = int(sys.argv[i+1])
