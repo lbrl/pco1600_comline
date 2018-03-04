@@ -128,6 +128,9 @@ int main(int argc, char* argv[])
 	WORD wTimeBaseDelay = 0x0002, wTimeBaseExposure = 0x0002;
 	WORD wBinHorz = 1, wBinVert = 1;
 	WORD wTriggerMode = 0;
+    DWORD dwPixelRate = 10000000;
+    WORD wADCOperation = 1;
+    SHORT sCoolSet = -150;
 	FILE * cfg_file;
 	int NumOfPic = 1;
 	char line_cfg[1000];
@@ -165,6 +168,12 @@ int main(int argc, char* argv[])
 			NumOfPic = val_cfg;
 		if (cmp_charr(line_cfg, "TriggerMode", 11))
 			wTriggerMode = val_cfg;
+		if (cmp_charr(line_cfg, "ADCOperation", 12))
+			wADCOperation = val_cfg;
+		if (cmp_charr(line_cfg, "PixelRate", 9))
+			dwPixelRate = val_cfg;
+		if (cmp_charr(line_cfg, "CoolingTemperature", 18))
+			sCoolSet = val_cfg;
 	}
 	fclose(cfg_file);
 	//
@@ -181,6 +190,16 @@ int main(int argc, char* argv[])
 	//
 	iRet = PCO_SetTriggerMode(cam, wTriggerMode);
 	//
+    iRet = PCO_SetADCOperation(cam, wADCOperation);
+	//
+    iRet = PCO_SetPixelRate(cam, dwPixelRate);
+	if (iRet != 0)
+		printf("Set pixel rate error :  %d\n", iRet);
+	//
+    iRet = PCO_SetCoolingSetpointTemperature(cam, sCoolSet);
+	if (iRet != 0)
+		printf("Set cooling setpoint temperature error :  %d\n", iRet);
+	//
 	iRet = PCO_ArmCamera(cam);
 	//
 	PCO_GetDelayExposureTime(cam, &dwDelay, &dwExposure, &wTimeBaseDelay, &wTimeBaseExposure);
@@ -193,6 +212,12 @@ int main(int argc, char* argv[])
 	PCO_GetTriggerMode(cam, &wTriggerMode);
 	printf("Trigger Mode :  0x%04x (0x0000 --- auto sequence,  0x0001 --- software trigger, 0x0002 --- [external exposure start & software trigger)\n",
 		wTriggerMode);
+    PCO_GetADCOperation(cam, &wADCOperation);
+    printf("ADC operation :  0x%04x.  (0x0001 --- single ADC,  0x0002 --- dual ADC)\n", wADCOperation);
+    PCO_GetPixelRate(cam, &dwPixelRate);
+    printf("Pixel rate :  %d.\n", dwPixelRate);
+    PCO_GetCoolingSetpointTemperature(cam, &sCoolSet);
+    printf("Cooling set point temperature :  %d\n", sCoolSet);
 
 
 	WORD XResAct, YResAct, XResMax, YResMax;
