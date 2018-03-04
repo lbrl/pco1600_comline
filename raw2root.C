@@ -25,6 +25,7 @@ int raw2root(string finname, string Foutname,
     tout->Branch("h", &h);
     ////////////////
     unsigned short a[nx];
+    int counter = 0;
     while( !fin.eof() ){
         for(int i=0; i<ny; i++){
             fin.read((char *) a, nx*2);
@@ -34,6 +35,9 @@ int raw2root(string finname, string Foutname,
         }
         if( !fin.eof() ){
             tout->Fill();
+            counter += 1;
+            if( counter % 100 == 0 )
+                std::cout << counter << "\n";
         }
     }
     std::cout << "Reach the end of the file.\n";
