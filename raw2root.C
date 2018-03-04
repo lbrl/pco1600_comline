@@ -11,9 +11,6 @@ int raw2root(string finname, string Foutname,
         printf( "The file openning failed.\n" );
         return 1;
     }
-    printf( "the size of char is %lu.\n", (sizeof(char)) );
-    printf( "the size of short is %lu.\n", (sizeof(short)) );
-    printf( "the size of Short_t is %lu.\n", (sizeof(Short_t)) );
     ////////////////
     TFile * Fout = new TFile(Foutname.c_str(), "recreate");
     if( Fout->IsZombie() ){
