@@ -1,8 +1,42 @@
+/*
+ *
+ *  Usage:
+ *    $ root -b -q 'raw2root.C+(input, output, binning_X, binning_Y)'
+ *    $ root -b -q 'raw2root.C+("/path/to/in/fi.le", "out.root")'
+ *    $ root -b -q 'raw2root.C("/path/to/in/fi.le", "out.root")'
+ *    $ root -b -q 'raw2root.C+("/path/to/in/fi.le", "out.root", 2, 2)'
+ *
+ *  Default binning is 1 by 1.
+ *
+ *  
+ *  An output file contains a TTree t and TH2S h histogram.
+ *  The histogram is the last converted frame.  The TTree t
+ *  contains one branch of TH2S histograms.  Each hisogram
+ *  is a frame,  from the very first to the last.
+ *
+ *  An example how to access the stred converted histograms:
+ *    Open file.
+ *    $ root output.root
+ *    Draw the last histogram h.
+ *    [] h->Draw("colz")
+ *    Draw the first histogram from the tree.
+ *    [] t->Draw("h->Draw(\"colz\")", "", "goff", 1)
+ *    or
+ *    [] t->Draw("h->Draw(\"colz\")", "", "goff", 1, 0)
+ *    Draw the second histogram.
+ *    [] t->Draw("h->Draw(\"colz\")", "", "goff", 1, 1)
+ *    Draw the tenth histogram.
+ *    [] t->Draw("h->Draw(\"colz\")", "", "goff", 1, 9)
+ *
+ */
+
+
 #include <TTree.h>
 #include <TFile.h>
 #include <TH2S.h>
 #include <iostream>
 #include <fstream>
+
 
 int raw2root(string finname, string Foutname,
         int binx = 1, int biny = 1){
