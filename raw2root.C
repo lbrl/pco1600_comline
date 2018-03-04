@@ -4,7 +4,8 @@
 #include <iostream>
 #include <fstream>
 
-int raw2root(string finname, string Foutname){
+int raw2root(string finname, string Foutname,
+        int binx = 1, int biny = 1){
     // std::ifstream fin("data/example_ifstream.bin", std::ios::binary);
     // std::ifstream fin("data/example_ifstream2.bin", std::ios::binary);
     // std::ifstream fin("data/example_ifstream3.bin", std::ios::binary);
@@ -18,7 +19,7 @@ int raw2root(string finname, string Foutname){
     ////////////////
     // TFile * Fout = new TFile("try5.root", "recreate");
     TFile * Fout = new TFile(Foutname.c_str(), "recreate");
-    const int nx =  1600, ny = 1200;
+    const int nx =  1600 / binx, ny = 1200 / biny;
     // const int nx =  800, ny = 600;
     TH2S * h = new TH2S("h", "h", nx, 0, nx, ny, 0, ny);
     TTree * tout = new TTree("t", "Tree with pictures");
