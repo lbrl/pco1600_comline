@@ -18,6 +18,14 @@ def check_binning_y(biny):
         return 1
 
 
+def check_pixel_rate(x):
+    if x in [10000000, 40000000]:
+        return x
+    else:
+        print 'Wrong pixel rate: {}!  Possible values are 10000000 and 40000000.  Set the pixel rate to 10000000.'.format(x)
+        return 10000000
+
+
 def main():
 	# Default values
 	texp = 100
@@ -77,6 +85,7 @@ def main():
             i += 1
         elif arg in ['pixelrate']:
             pixelrate = int(sys.argv[i+1])
+            pixelrate = check_pixel_rate(pixelrate)
             i += 1
         elif arg in ['coolset', 'coolingtemp', 'cooltemp', 'coolingtemperature']:
             cooltemp = int(sys.argv[i+1])
