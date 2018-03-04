@@ -26,62 +26,88 @@ def check_pixel_rate(x):
         return 10000000
 
 
+def check_n_adc(x):
+    if x in [1, 2]:
+        return x
+    else:
+        print 'Wrong number of ADCs: {}!  Possible values are 1 and 2.  Set the number of ADC to 1.'.format(x)
+        return 1
+
+
+def check_exposure_base(x):
+    if x in [0, 1, 2]:
+        return x
+    else:
+        print 'Wrong exposure time base: {}!  Possible values are 0, 1 and 2.  Set the time base to 0.'.format(x)
+        return 0
+
+def check_delay_base(x):
+    if x in [0, 1, 2]:
+        return x
+    else:
+        print 'Wrong delay time base: {}!  Possible values are 0, 1 and 2.  Set the time base to 0.'.format(x)
+        return 0
+
+
 def main():
-	# Default values
-	texp = 100
-	tdelay = 0
-	expbase = 2
-	delaybase = 2
-	binx = 1
-	biny = 1
-	trigmode = 0
-	npic = 5
-	foutname = 'cfg_by_mkcfg.txt'
+    # Default values
+    texp = 100
+    tdelay = 0
+    expbase = 2
+    delaybase = 2
+    binx = 1
+    biny = 1
+    trigmode = 0
+    npic = 5
+    foutname = 'cfg_by_mkcfg.txt'
     nadc = 1
     pixelrate = 10000000
     cooltemp = -150
-	# Read input parameters
-	narg = len(sys.argv)
-	i = 0
-	while i < narg:
-		arg = sys.argv[i]
-		if arg in ['texp', 'texposure']:
-			texp = int(sys.argv[i+1])
-			i += 1
-		elif arg == ['tdel', 'tdelay']:
-			tdelay = int(sys.argv[i+1])
-			i += 1
-		elif arg in ['expbase', 'texpbase']:
-			expbase = int(sys.argv[i+1])
-			i += 1
-		elif arg in ['delbase', 'tdelbase', 'delaybase', 'delbase']:
-			delaybase = int(sys.argv[i+1])
-			i += 1
-		elif arg in ['binx', 'binningx']:
-			binx = int(sys.argv[i+1])
+    # Read input parameters
+    narg = len(sys.argv)
+    i = 0
+    while i < narg:
+        arg = sys.argv[i]
+        if arg in ['texp', 'texposure']:
+            texp = int(sys.argv[i+1])
+            i += 1
+        elif arg == ['tdel', 'tdelay']:
+            tdelay = int(sys.argv[i+1])
+            i += 1
+        elif arg in ['expbase', 'texpbase']:
+            expbase = int(sys.argv[i+1])
+            expbase = check_exposure_base(expbase)
+            i += 1
+        elif arg in ['delbase', 'tdelbase', 'delaybase', 'delbase']:
+            delaybase = int(sys.argv[i+1])
+            delaybase = check_delay_base(delaybase)
+            i += 1
+        elif arg in ['binx', 'binningx']:
+            binx = int(sys.argv[i+1])
             binx = check_binning_x(binx)
-			i += 1
-		elif arg in ['biny', 'binningy']:
-			biny = int(sys.argv[i+1])
+            i += 1
+        elif arg in ['biny', 'binningy']:
+            biny = int(sys.argv[i+1])
             biny = check_binning_y(binx)
-			i += 1
-		elif arg in ['binxy', 'binningxy']:
-			binx = int(sys.argv[i+1])
-			biny = int(sys.argv[i+2])
+            i += 1
+        elif arg in ['binxy', 'binningxy']:
+            binx = int(sys.argv[i+1])
+            biny = int(sys.argv[i+2])
             binx = check_binning_x(binx)
             biny = check_binning_y(binx)
-			i += 2
-		elif arg in ['trigmode', 'triggermode']:
-			trigmode = int(sys.argv[i+1])
-			i += 1
-		elif arg in ['npic', 'numberofpic', 'npics', 'numberofpictures']:
-			npic = int(sys.argv[i+1])
-			i += 1
-		elif arg in ['name', 'outname', 'outputname', 'fout', 'foutname']:
-			foutname = sys.argv[i+1]
-			i += 1
-        elif arg in ['adc', 'adcoper', 'adcoperation']"
+            i += 2
+        elif arg in ['trigmode', 'triggermode']:
+            trigmode = int(sys.argv[i+1])
+            i += 1
+        elif arg in ['npic', 'numberofpic', 'npics', 'numberofpictures']:
+            npic = int(sys.argv[i+1])
+            i += 1
+        elif arg in ['name', 'outname', 'outputname', 'fout', 'foutname']:
+            foutname = sys.argv[i+1]
+            i += 1
+        elif arg in ['adc', 'adcoper', 'adcoperation']:
             nadc = int(sys.argv[i+1])
+            nadc = check_n_adc(nadc)
             i += 1
         elif arg in ['pixelrate']:
             pixelrate = int(sys.argv[i+1])
@@ -90,25 +116,25 @@ def main():
         elif arg in ['coolset', 'coolingtemp', 'cooltemp', 'coolingtemperature']:
             cooltemp = int(sys.argv[i+1])
             i += 1
-		else:
-			print 'There is not a such option : ', arg
-		i += 1
-	# Make the cfg body
-	out = 'Exposure {}\n'.format(texp)
-	out += 'ExposureBase {}\n'.format(expbase)
-	out += 'Delay {}\n'.format(tdelay)
-	out += 'DelayBase {}\n'.format(delaybase)
-	out += 'BinningX {}\n'.format(binx)
-	out += 'BinningY {}\n'.format(biny)
-	out += 'TriggerMode {}\n'.format(trigmode)
-	out += 'NumberOfPictures {}\n'.format(npic)
+        else:
+            print 'There is not a such option : ', arg
+        i += 1
+    # Make the cfg body
+    out = 'Exposure {}\n'.format(texp)
+    out += 'ExposureBase {}\n'.format(expbase)
+    out += 'Delay {}\n'.format(tdelay)
+    out += 'DelayBase {}\n'.format(delaybase)
+    out += 'BinningX {}\n'.format(binx)
+    out += 'BinningY {}\n'.format(biny)
+    out += 'TriggerMode {}\n'.format(trigmode)
+    out += 'NumberOfPictures {}\n'.format(npic)
     out += 'ADCOperation {}\n'.format(nadc)
     out += 'PixelRate {}\n'.format(pixelrate)
     out += 'CoolingTemperature {}\n'.format(cooltemp)
-	print out
-	fout = open(foutname, 'w')
-	fout.write(out)
-	fout.close()
+    print out
+    fout = open(foutname, 'w')
+    fout.write(out)
+    fout.close()
 
 
 def help():
