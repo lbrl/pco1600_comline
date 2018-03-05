@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
 	WORD wTriggerMode = 0;
     DWORD dwPixelRate = 10000000;
     WORD wADCOperation = 1;
-    SHORT sCoolSet = -150;
+    SHORT sCoolSet = -15;
 	FILE * cfg_file;
 	int NumOfPic = 1;
 	char line_cfg[1000];
