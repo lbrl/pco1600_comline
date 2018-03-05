@@ -5,6 +5,9 @@
  *    $ root -b -q 'raw2root.C+("/path/to/in/fi.le", "out.root")'
  *    $ root -b -q 'raw2root.C("/path/to/in/fi.le", "out.root")'
  *    $ root -b -q 'raw2root.C+("/path/to/in/fi.le", "out.root", 2, 2)'
+ *    $ root
+ *    [] .L raw2root.C
+ *    [] raw2root("/path/to/in/fi.le", "out.root", 2, 2)
  *
  *  Default binning is 1 by 1.
  *
