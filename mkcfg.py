@@ -62,7 +62,7 @@ def main():
     foutname = 'cfg_by_mkcfg.txt'
     nadc = 1
     pixelrate = 10000000
-    cooltemp = -150
+    cooltemp = -15
     # Read input parameters
     narg = len(sys.argv)
     i = 0
