@@ -37,6 +37,9 @@
 // #include <iostream>
 // #include <fstream>
 #include <string.h>
+#include <ctime>
+// #define PCO_ERRT_H_CREATE_OBJECT
+// #define PCO_ERR_H_CREATE_OBJECT
 // end my
 
 
@@ -128,9 +131,9 @@ int main(int argc, char* argv[])
 	WORD wTimeBaseDelay = 0x0002, wTimeBaseExposure = 0x0002;
 	WORD wBinHorz = 1, wBinVert = 1;
 	WORD wTriggerMode = 0;
-    DWORD dwPixelRate = 10000000;
-    WORD wADCOperation = 1;
-    SHORT sCoolSet = -15;
+	DWORD dwPixelRate = 10000000;
+	WORD wADCOperation = 1;
+	SHORT sCoolSet = -15;
 	FILE * cfg_file;
 	int NumOfPic = 1;
 	char line_cfg[1000];
@@ -190,17 +193,30 @@ int main(int argc, char* argv[])
 	//
 	iRet = PCO_SetTriggerMode(cam, wTriggerMode);
 	//
-    iRet = PCO_SetADCOperation(cam, wADCOperation);
+	iRet = PCO_SetADCOperation(cam, wADCOperation);
 	//
-    iRet = PCO_SetPixelRate(cam, dwPixelRate);
+	iRet = PCO_SetPixelRate(cam, dwPixelRate);
 	if (iRet != 0)
 		printf("Set pixel rate error :  %d\n", iRet);
 	//
-    iRet = PCO_SetCoolingSetpointTemperature(cam, sCoolSet);
+	iRet = PCO_SetCoolingSetpointTemperature(cam, sCoolSet);
 	if (iRet != 0)
 		printf("Set cooling setpoint temperature error :  %d\n", iRet);
 	//
+	int timeouts[3] = {2000, 23000, 250};
+	/*
+	if (wTimeBaseExposure == 2 && dwExposure > 2500) {
+		timeouts[1] = dwExposure + 3000;
+		timeouts[2] = dwExposure + 250;
+	}
+	*/
+	iRet = PCO_SetTimeouts(cam, timeouts, sizeof(timeouts));
+	if (iRet != 0)
+		printf("Set timeouts error :  %d\n", iRet);
+	//
 	iRet = PCO_ArmCamera(cam);
+	if (iRet != 0)
+		printf("Arm camera error :  %d\n", iRet);
 	//
 	PCO_GetDelayExposureTime(cam, &dwDelay, &dwExposure, &wTimeBaseDelay, &wTimeBaseExposure);
 	printf("delay = %d, exposure = %d, time base delay = 0x%04x, time base exposure = 0x%04x (0x0000 = ns, 0x0001 = us, 0x0002 = ms)\n",
@@ -212,12 +228,12 @@ int main(int argc, char* argv[])
 	PCO_GetTriggerMode(cam, &wTriggerMode);
 	printf("Trigger Mode :  0x%04x (0x0000 --- auto sequence,  0x0001 --- software trigger, 0x0002 --- [external exposure start & software trigger)\n",
 		wTriggerMode);
-    PCO_GetADCOperation(cam, &wADCOperation);
-    printf("ADC operation :  0x%04x.  (0x0001 --- single ADC,  0x0002 --- dual ADC)\n", wADCOperation);
-    PCO_GetPixelRate(cam, &dwPixelRate);
-    printf("Pixel rate :  %d.\n", dwPixelRate);
-    PCO_GetCoolingSetpointTemperature(cam, &sCoolSet);
-    printf("Cooling set point temperature :  %d\n", sCoolSet);
+	PCO_GetADCOperation(cam, &wADCOperation);
+	printf("ADC operation :  0x%04x.  (0x0001 --- single ADC,  0x0002 --- dual ADC)\n", wADCOperation);
+	PCO_GetPixelRate(cam, &dwPixelRate);
+	printf("Pixel rate :  %d.\n", dwPixelRate);
+	PCO_GetCoolingSetpointTemperature(cam, &sCoolSet);
+	printf("Cooling set point temperature :  %d\n", sCoolSet);
 
 
 	WORD XResAct, YResAct, XResMax, YResMax;
@@ -247,6 +263,9 @@ int main(int argc, char* argv[])
 	FILE * myfile;
 	// myfile = fopen("C:\\Users\\muonbpm\\Desktop\\test_img\\example.txt", "wb");
 	myfile = fopen(foutname, "wb");
+	std::clock_t start_time;
+	start_time = std::clock();
+	int n_bad_frame = 0;
 	// my end
 	printf("Grab single images from running camera\n");
 	for (int i = 1; i <= NumOfPic; i++)
@@ -255,7 +274,10 @@ int main(int argc, char* argv[])
 		iRet = PCO_GetImageEx(cam, 1, 0, 0, BufNum, XResAct, YResAct, 16);
 		if (iRet != PCO_NOERROR)
 		{
-			printf("failed \n");
+			printf("failed : 0x%08x\n", iRet);
+			if (0xa0320005 && iRet)
+				printf("Error inside the GigE driver. Timeout in function\n");
+			n_bad_frame++;
 			// break;
 		}
 		else {
@@ -274,6 +296,10 @@ int main(int argc, char* argv[])
 		}
 	}
 	// my
+	double duration = (std::clock() - start_time) / (double)CLOCKS_PER_SEC;
+	double datataking_rate = NumOfPic / duration;
+	printf("Data taking time :  %.3f sec  ( %.3f Hz )\n", duration, datataking_rate);
+	printf("%d bad frames out of %d.\n", n_bad_frame, NumOfPic);
 	fclose(myfile);
 	// my end
 
@@ -308,4 +334,3 @@ void print_transferpar(HANDLE cam)
 		printf("Dataformat:  %u 0x%x\nTransmit:    %u\n", cl_par.DataFormat, cl_par.DataFormat, cl_par.Transmit);
 	}
 }
-
