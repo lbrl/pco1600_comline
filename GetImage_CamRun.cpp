@@ -43,7 +43,7 @@
 // end my
 
 
-#define _FILEFUNCTION_
+// #define _FILEFUNCTION_// Define if want to save tiff pictures.
 
 #ifdef _FILEFUNCTION_
 char file_name[50];
@@ -203,12 +203,12 @@ int main(int argc, char* argv[])
 	if (iRet != 0)
 		printf("Set cooling setpoint temperature error :  %d\n", iRet);
 	//
-	int timeouts[3] = {2000, 23000, 250};
-	/*
+	int timeouts[3] = {2000, 3000, 250};
 	if (wTimeBaseExposure == 2 && dwExposure > 2500) {
-		timeouts[1] = dwExposure + 3000;
-		timeouts[2] = dwExposure + 250;
+		timeouts[1] = 5*dwExposure + 3000;
+		// timeouts[2] = dwExposure + 250;
 	}
+	/*
 	*/
 	iRet = PCO_SetTimeouts(cam, timeouts, sizeof(timeouts));
 	if (iRet != 0)
