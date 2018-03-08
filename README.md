@@ -45,6 +45,29 @@ PS > python mkcfg.py texp 8 texpbase 2 npics 10 fout cfg_example.txt help
 PS > python mkcfg.py help
 ```
 
+### Output data
+Output data a picture or set of pictures.
+Each picture is represented by the sequence of pixel.
+Each pixel corresponds to two bytes.
+The **pco.1600** camera has a 14 bit range.
+So,  from these two bytes,  two lowest bits are dumb.
+There are not a header, spacing between pictures, or ending in the file body.
+For example, if one takes one picture without additional binning,
+*i. e.* the resolution is 1600 x 1200,
+then the size of the file is 2 x 1600 x 1200 = 3840000 bytes.
+
+To convert data one can use *raw2root.C*,
+which used as:
+```sh
+$ root -b -q 'raw2root.C+(input, output, binning_X, binning_Y)'
+```
+In case of ROOT5 on Windows the following way of usage is recommended:
+```sh
+$ root
+[] .L raw2root.C
+[] raw2root("/path/to/in/file.bin", "out.root", 2, 2)
+```
+
 
 ### Automatisation
 Please look the example file _noise.py_.
